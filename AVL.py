@@ -206,7 +206,7 @@ actor2 = input("Enter an actor: ")
 actor2 = int(getActorIDFromName(actor2))
 while actor2 > 99998:
     actor2 = input("That actor is not yet available.  Please try another: ")
-    actor2 = int(getActorIDFromName())
+    actor2 = int(getActorIDFromName(actor2))
 
 
 actorList = [actor1]
