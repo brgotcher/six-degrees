@@ -12,7 +12,7 @@ KEY = "fd1ba63489529c937b3759165608f6cd"
 
 
 a = open("actors.txt", "w")
-for i in range(99999):
+for i in range(1, 99999):
     try:
         req = requests.get("https://api.themoviedb.org/3/person/" + str(i) + "/movie_credits?api_key=fd1ba63489529c937b3759165608f6cd", timeout=20)
         list = []
@@ -40,7 +40,7 @@ a.close()
 print("finished writing actor file")
 
 m = open("movies.txt", "w")
-for i in range(99999):
+for i in range(1, 99999):
     try:
         req = requests.get("https://api.themoviedb.org/3/movie/" + str(i) + "/credits?api_key=fd1ba63489529c937b3759165608f6cd", timeout=20)
         list = []
@@ -65,16 +65,3 @@ for i in range(99999):
 
 m.close()
 
-
-    # print()
-    # print("=========================================================================================")
-    # print(i)
-    # print("=========================================================================================")
-    # print(req)
-    # print()
-    # movies = req["cast"]
-    # list = []
-    # for movie in movies:
-    #     list.append(movie["title"])
-    # print(i)
-    # print(list)
