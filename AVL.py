@@ -112,6 +112,8 @@ def getActorIDFromName(name):
 
 def getMovieList(id):
     movies = linecache.getline("actors.txt", id)
+    if len(movies) < 5:
+        return []
     movies = movies[1:-2]
     movies = movies.split(", ")
     for i in range(0, len(movies)):
@@ -120,6 +122,9 @@ def getMovieList(id):
 
 def getCastList(id):
     cast = linecache.getline("movies.txt", id)
+    length = len(cast)
+    if length < 5:
+        return []
     cast = cast[1:-2]
     cast = cast.split(", ")
     for i in range(0, len(cast)):
