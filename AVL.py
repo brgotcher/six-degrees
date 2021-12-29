@@ -132,13 +132,13 @@ def getCastList(id):
     return cast
 
 def getMovieNameFromID(id):
-    data = requests.get("https://api.themoviedb.org/3/movie/" + str(id) + "?api_key=fd1ba63489529c937b3759165608f6cd")
+    data = requests.get("https://api.themoviedb.org/3/movie/" + str(id) + "?api_key=" + KEY)
     data = data.json()
     title = data["title"]
     return title
 
 def getActorNameFromID(id):
-    data = requests.get("https://api.themoviedb.org/3/person/" + str(id) + "?api_key=fd1ba63489529c937b3759165608f6cd")
+    data = requests.get("https://api.themoviedb.org/3/person/" + str(id) + "?api_key=" + KEY)
     data = data.json()
     name = data["name"]
     return name
@@ -148,12 +148,12 @@ def checkConnections(actors, aTree, aRoot, mTree, mRoot, count, target):
         return -1
     newActorList = []
     for actor in actors:
-        if actor > 99999:
+        if actor > 999997:
             continue
         newMovieList = []
         movieList = getMovieList(actor)
         for movie in movieList:
-            if movie > 85419:
+            if movie > 921035:
                 continue
             # if movie not in movies and movie not in newMovieList:
             if not mTree.search(mRoot, movie):
@@ -162,7 +162,7 @@ def checkConnections(actors, aTree, aRoot, mTree, mRoot, count, target):
         for movie in newMovieList:
             actorList = getCastList(movie)
             for actr in actorList:
-                if actr > 99998:
+                if actr > 999997:
                     continue
                 # if actr not in actors and actr not in newActorList:
                 if not aTree.search(aRoot, actr):
@@ -197,6 +197,8 @@ def backtrack(path, aTree, mTree, aRoot, mRoot):
 #     movieList.append(movie["id"])
 # print(movieList)
 
+
+
 actorTree = Tree()
 movieTree = Tree()
 actorRoot = None
@@ -204,12 +206,12 @@ movieRoot = None
 
 actor1 = input("Enter an actor: ")
 actor1 = int(getActorIDFromName(actor1))
-while actor1 > 99998:
+while actor1 > 999997:
     actor1 = input("That actor is not yet available.  Please try another: ")
     actor1 = int(getActorIDFromName(actor1))
 actor2 = input("Enter an actor: ")
 actor2 = int(getActorIDFromName(actor2))
-while actor2 > 99998:
+while actor2 > 999997:
     actor2 = input("That actor is not yet available.  Please try another: ")
     actor2 = int(getActorIDFromName(actor2))
 
