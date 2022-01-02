@@ -84,6 +84,7 @@ class Tree:
         print(root.id, end=" ")
         self.printTree(root.right)
 
+
     def getInOrderArray(self, root, arr):
         if not root:
             return
@@ -91,6 +92,7 @@ class Tree:
         self.getInOrderArray(root.left, arr)
         arr.append(root.id)
         self.getInOrderArray(root.right, arr)
+
 
     def search(self, root, id):
         if not root:
@@ -103,12 +105,17 @@ class Tree:
         else:
             return root
 
+
 def getActorIDFromName(name):
     name = name.replace(" ", "+")
     details = requests.get("https://api.themoviedb.org/3/search/person?api_key=" + KEY + "&query=" + name)
     details = details.json()
+    if not details["results"]:
+        tryagain = input("Error: check spelling and try again")
+        getActorIDFromName(tryagain)
     name = str(details["results"][0]["id"])
     return name
+
 
 def getMovieList(id):
     movies = linecache.getline("actors.txt", id)
@@ -119,6 +126,7 @@ def getMovieList(id):
     for i in range(0, len(movies)):
         movies[i] = int(movies[i])
     return movies
+
 
 def getCastList(id):
     cast = linecache.getline("movies.txt", id)
@@ -131,17 +139,20 @@ def getCastList(id):
         cast[i] = int(cast[i])
     return cast
 
+
 def getMovieNameFromID(id):
     data = requests.get("https://api.themoviedb.org/3/movie/" + str(id) + "?api_key=" + KEY)
     data = data.json()
     title = data["title"]
     return title
 
+
 def getActorNameFromID(id):
     data = requests.get("https://api.themoviedb.org/3/person/" + str(id) + "?api_key=" + KEY)
     data = data.json()
     name = data["name"]
     return name
+
 
 def checkConnections(actors, aTree, aRoot, mTree, mRoot, count, target):
     if count >= 5:
@@ -175,6 +186,7 @@ def checkConnections(actors, aTree, aRoot, mTree, mRoot, count, target):
 
     return checkConnections(newActorList, aTree, aRoot, mTree, mRoot, count+1, target)
 
+
 def backtrack(path, aTree, mTree, aRoot, mRoot):
     pathlength = len(path)
     last = path[pathlength-1]
@@ -186,17 +198,6 @@ def backtrack(path, aTree, mTree, aRoot, mRoot):
     else:
         path.append(aTree.search(aRoot, last).src)
         return backtrack(path, aTree, mTree, aRoot, mRoot)
-
-# print(getMovieList(536))
-#
-# data = requests.get("https://api.themoviedb.org/3/person/536/movie_credits?api_key=" + KEY)
-# data = data.json()
-# data = data["cast"]
-# movieList = []
-# for movie in data:
-#     movieList.append(movie["id"])
-# print(movieList)
-
 
 
 actorTree = Tree()
