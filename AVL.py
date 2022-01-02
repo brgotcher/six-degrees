@@ -111,10 +111,10 @@ def getActorIDFromName(name):
     details = requests.get("https://api.themoviedb.org/3/search/person?api_key=" + KEY + "&query=" + name)
     details = details.json()
     if not details["results"]:
-        tryagain = input("Error: check spelling and try again")
-        getActorIDFromName(tryagain)
-    name = str(details["results"][0]["id"])
-    return name
+        tryagain = input("Error: Actor not found check spelling and try again\nEnter an actor: ")
+        return getActorIDFromName(tryagain)
+    id = str(details["results"][0]["id"])
+    return id
 
 
 def getMovieList(id):
@@ -200,37 +200,42 @@ def backtrack(path, aTree, mTree, aRoot, mRoot):
         return backtrack(path, aTree, mTree, aRoot, mRoot)
 
 
-actorTree = Tree()
-movieTree = Tree()
-actorRoot = None
-movieRoot = None
 
-actor1 = input("Enter an actor: ")
-actor1 = int(getActorIDFromName(actor1))
-while actor1 > 999997:
-    actor1 = input("That actor is not yet available.  Please try another: ")
+while True:
+    actorTree = Tree()
+    movieTree = Tree()
+    actorRoot = None
+    movieRoot = None
+
+    actor1 = input("Enter an actor: ")
     actor1 = int(getActorIDFromName(actor1))
-actor2 = input("Enter an actor: ")
-actor2 = int(getActorIDFromName(actor2))
-while actor2 > 999997:
-    actor2 = input("That actor is not yet available.  Please try another: ")
+    while actor1 > 999997:
+        actor1 = input("That actor is not yet available.  Please try another: ")
+        actor1 = int(getActorIDFromName(actor1))
+    actor2 = input("Enter an actor: ")
     actor2 = int(getActorIDFromName(actor2))
+    while actor2 > 999997:
+        actor2 = input("That actor is not yet available.  Please try another: ")
+        actor2 = int(getActorIDFromName(actor2))
 
 
-actorList = [actor1]
-actorRoot = actorTree.insert(actorRoot, actor1, None)
-res = checkConnections(actorList, actorTree, actorRoot, movieTree, movieRoot, 0, actor2)
-print(res)
+    actorList = [actor1]
+    actorRoot = actorTree.insert(actorRoot, actor1, None)
+    res = checkConnections(actorList, actorTree, actorRoot, movieTree, movieRoot, 0, actor2)
+    print(res)
 
-path = res[-2::-1]
-print(path)
+    path = res[-2::-1]
+    print(path)
 
-print(getActorNameFromID(actor1) + " appeared in ", end="")
-for i in range(1, len(path)-1):
-    if i % 2 == 0:
-        name = getActorNameFromID(path[i])
-        print(name + ", who appeared in ", end="")
-    else:
-        title = getMovieNameFromID(path[i])
-        print(title + " with ", end="")
-print(getActorNameFromID(actor2))
+    print(getActorNameFromID(actor1) + " appeared in ", end="")
+    for i in range(1, len(path)-1):
+        if i % 2 == 0:
+            name = getActorNameFromID(path[i])
+            print(name + ", who appeared in ", end="")
+        else:
+            title = getMovieNameFromID(path[i])
+            print(title + " with ", end="")
+    print(getActorNameFromID(actor2))
+    cont = input("Enter 0 to exit or any other input to continue")
+    if cont == "0":
+        exit()
