@@ -3,7 +3,7 @@ import requests
 KEY = "fd1ba63489529c937b3759165608f6cd"
 
 # compilation and documentary films that should not count as connections: to be removed after collecting data
-compilations = [454330, 253639, 623639, 724336]
+compilations = [454330, 253639, 623639, 724336, 454330]
 
 
 a = open("actors.txt", "w")
