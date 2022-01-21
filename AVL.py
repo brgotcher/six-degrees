@@ -107,20 +107,27 @@ class Tree:
 
 
 def getActorIDFromName(name):
+    # take a string representing an actor's name and send a GET request to tmdb to get their unique ID number
     name = name.replace(" ", "+")
     details = requests.get("https://api.themoviedb.org/3/search/person?api_key=" + KEY + "&query=" + name)
     details = details.json()
+    # check for a valid response to the GET request
     if not details["results"]:
         tryagain = input("Error: Actor not found check spelling and try again\nEnter an actor: ")
         return getActorIDFromName(tryagain)
+    # pull ID number from results and return
     id = str(details["results"][0]["id"])
     return id
 
 
 def getMovieList(id):
+    # take an actor ID number and return list of movie ID numbers for movies they have appeared in
+    # pull corresponding line from actors.txt
     movies = linecache.getline("actors.txt", id)
-    if len(movies) < 5:
+    # movies is a string, if length less than 4 there won't be any valid ID numbers, so return empty list
+    if len(movies) < 4:
         return []
+    # break string down into a list and return
     movies = movies[1:-2]
     movies = movies.split(", ")
     for i in range(0, len(movies)):
@@ -129,9 +136,10 @@ def getMovieList(id):
 
 
 def getCastList(id):
+    # take movie ID and return list of actors IDs for actors that appeared in the movie
     cast = linecache.getline("movies.txt", id)
     length = len(cast)
-    if length < 5:
+    if length < 4:
         return []
     cast = cast[1:-2]
     cast = cast.split(", ")
@@ -141,6 +149,7 @@ def getCastList(id):
 
 
 def getMovieNameFromID(id):
+    # take movie ID number, send get request to tmdb to retrieve the movie's name
     data = requests.get("https://api.themoviedb.org/3/movie/" + str(id) + "?api_key=" + KEY)
     data = data.json()
     title = data["title"]
@@ -148,6 +157,7 @@ def getMovieNameFromID(id):
 
 
 def getActorNameFromID(id):
+    # take actor ID number, send get request to tmdb to retrieve the actor's name
     data = requests.get("https://api.themoviedb.org/3/person/" + str(id) + "?api_key=" + KEY)
     data = data.json()
     name = data["name"]
@@ -155,6 +165,7 @@ def getActorNameFromID(id):
 
 
 def checkConnections(actors, aTree, aRoot, mTree, mRoot, count, target):
+    #
     if count >= 5:
         return -1
     newActorList = []
