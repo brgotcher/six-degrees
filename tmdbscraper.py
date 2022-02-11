@@ -7,7 +7,7 @@ compilations = [454330, 253639, 623639, 724336, 454330, 467062]
 
 
 a = open("actors.txt", "w")
-for i in range(1, 99999):
+for i in range(1, 999999):
     try:
         req = requests.get("https://api.themoviedb.org/3/person/" + str(i) + "/movie_credits?api_key=fd1ba63489529c937b3759165608f6cd", timeout=20)
         list = []
@@ -35,7 +35,7 @@ a.close()
 print("finished writing actor file")
 
 m = open("movies.txt", "w")
-for i in range(1, 99999):
+for i in range(1, 999999):
     if i not in compilations:
         try:
             req = requests.get("https://api.themoviedb.org/3/movie/" + str(i) + "/credits?api_key=fd1ba63489529c937b3759165608f6cd", timeout=20)
