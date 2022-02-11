@@ -5,25 +5,24 @@ import AVL
 KEY = "fd1ba63489529c937b3759165608f6cd"
 
 
-
-def getActorIDFromName(name):
+def get_actor_id_from_name(actor_name):
     # take a string representing an actor's name and send a GET request to tmdb to get their unique ID number
-    name = name.replace(" ", "+")
-    details = requests.get("https://api.themoviedb.org/3/search/person?api_key=" + KEY + "&query=" + name)
+    actor_name = actor_name.replace(" ", "+")
+    details = requests.get("https://api.themoviedb.org/3/search/person?api_key=" + KEY + "&query=" + actor_name)
     details = details.json()
     # check for a valid response to the GET request
     if not details["results"]:
         tryagain = input("Error: Actor not found check spelling and try again\nEnter an actor: ")
-        return getActorIDFromName(tryagain)
+        return get_actor_id_from_name(tryagain)
     # pull ID number from results and return
-    id = str(details["results"][0]["id"])
-    return id
+    actor_id = str(details["results"][0]["id"])
+    return actor_id
 
 
-def getMovieList(id):
+def get_movie_list(actor_id):
     # take an actor ID number and return list of movie ID numbers for movies they have appeared in
     # pull corresponding line from actors.txt
-    movies = linecache.getline("actors.txt", id)
+    movies = linecache.getline("actors.txt", actor_id)
     # movies is a string, if length less than 4 there won't be any valid ID numbers, so return empty list
     if len(movies) < 4:
         return []
@@ -35,9 +34,9 @@ def getMovieList(id):
     return movies
 
 
-def getCastList(id):
+def get_cast_list(movie_id):
     # take movie ID and return list of actors IDs for actors that appeared in the movie
-    cast = linecache.getline("movies.txt", id)
+    cast = linecache.getline("movies.txt", movie_id)
     length = len(cast)
     if length < 4:
         return []
@@ -48,67 +47,65 @@ def getCastList(id):
     return cast
 
 
-def getMovieNameFromID(id):
+def get_movie_name_from_id(movie_id):
     # take movie ID number, send get request to tmdb to retrieve the movie's name
-    data = requests.get("https://api.themoviedb.org/3/movie/" + str(id) + "?api_key=" + KEY)
+    data = requests.get("https://api.themoviedb.org/3/movie/" + str(movie_id) + "?api_key=" + KEY)
     data = data.json()
-    title = data["title"]
-    return title
+    return data["title"]
 
 
-def getActorNameFromID(id):
+def get_actor_name_from_id(id):
     # take actor ID number, send get request to tmdb to retrieve the actor's name
     data = requests.get("https://api.themoviedb.org/3/person/" + str(id) + "?api_key=" + KEY)
     data = data.json()
-    name = data["name"]
-    return name
+    return data["name"]
 
 
-def checkConnections(actors, aTree, aRoot, mTree, mRoot, count, target):
+def check_connections(actors, atree, aroot, mtree, mroot, count, target):
     #
     if count >= 5:
         return -1
-    newActorList = []
+    new_actor_list = []
     for actor in actors:
         if actor > 999997:
             continue
-        newMovieList = []
-        movieList = getMovieList(actor)
-        for movie in movieList:
+        new_movie_list = []
+        movie_list = get_movie_list(actor)
+        for movie in movie_list:
             if movie > 921035:
                 continue
-            # if movie not in movies and movie not in newMovieList:
-            if not mTree.search(mRoot, movie):
-                newMovieList.append(movie)
-                mRoot = mTree.insert(mRoot, movie, actor)
-        for movie in newMovieList:
-            actorList = getCastList(movie)
-            for actr in actorList:
+            # if movie not in movies and movie not in new_movie_list:
+            if not mtree.search(mroot, movie):
+                new_movie_list.append(movie)
+                mroot = mtree.insert(mroot, movie, actor)
+        for movie in new_movie_list:
+            actor_list = get_cast_list(movie)
+            for actr in actor_list:
                 if actr > 999997:
                     continue
-                # if actr not in actors and actr not in newActorList:
-                if not aTree.search(aRoot, actr):
-                    newActorList.append(actr)
-                    aRoot = aTree.insert(aRoot, actr, movie)
+                # if actr not in actors and actr not in new_actor_list:
+                if not atree.search(aroot, actr):
+                    new_actor_list.append(actr)
+                    aroot = atree.insert(aroot, actr, movie)
                 if actr == target:
                     path = [actr, movie]
-                    path = backtrack(path, aTree, mTree, aRoot, mRoot)
+                    path = backtrack(path, atree, mtree, aroot, mroot)
                     return path
 
-    return checkConnections(newActorList, aTree, aRoot, mTree, mRoot, count+1, target)
+    return check_connections(new_actor_list, atree, aroot, mtree, mroot, count + 1, target)
 
 
-def backtrack(path, aTree, mTree, aRoot, mRoot):
+def backtrack(path, atree, mtree, aroot, mroot):
     pathlength = len(path)
     last = path[pathlength-1]
-    if last == None:
+    if not last:
         return path
     if pathlength % 2 == 0:
-        path.append(mTree.search(mRoot, last).src)
-        return backtrack(path, aTree, mTree, aRoot, mRoot)
+        path.append(mtree.search(mroot, last).src)
+        return backtrack(path, atree, mtree, aroot, mroot)
     else:
-        path.append(aTree.search(aRoot, last).src)
-        return backtrack(path, aTree, mTree, aRoot, mRoot)
+        path.append(atree.search(aroot, last).src)
+        return backtrack(path, atree, mtree, aroot, mroot)
 
 
 while True:
@@ -118,33 +115,33 @@ while True:
     movieRoot = None
 
     actor1 = input("Enter an actor: ")
-    actor1 = int(getActorIDFromName(actor1))
+    actor1 = int(get_actor_id_from_name(actor1))
     while actor1 > 999997:
         actor1 = input("That actor is not yet available.  Please try another: ")
-        actor1 = int(getActorIDFromName(actor1))
+        actor1 = int(get_actor_id_from_name(actor1))
     actor2 = input("Enter an actor: ")
-    actor2 = int(getActorIDFromName(actor2))
+    actor2 = int(get_actor_id_from_name(actor2))
     while actor2 > 999997:
         actor2 = input("That actor is not yet available.  Please try another: ")
-        actor2 = int(getActorIDFromName(actor2))
+        actor2 = int(get_actor_id_from_name(actor2))
 
     actorList = [actor1]
     actorRoot = actorTree.insert(actorRoot, actor1, None)
-    res = checkConnections(actorList, actorTree, actorRoot, movieTree, movieRoot, 0, actor2)
+    res = check_connections(actorList, actorTree, actorRoot, movieTree, movieRoot, 0, actor2)
     print(res)
 
     path = res[-2::-1]
     print(path)
 
-    print(getActorNameFromID(actor1) + " appeared in ", end="")
+    print(get_actor_name_from_id(actor1) + " appeared in ", end="")
     for i in range(1, len(path)-1):
         if i % 2 == 0:
-            name = getActorNameFromID(path[i])
+            name = get_actor_name_from_id(path[i])
             print(name + ", who appeared in ", end="")
         else:
-            title = getMovieNameFromID(path[i])
+            title = get_movie_name_from_id(path[i])
             print(title + " with ", end="")
-    print(getActorNameFromID(actor2))
+    print(get_actor_name_from_id(actor2))
     cont = input("Enter 0 to exit or any other input to continue")
     if cont == "0":
         exit()
