@@ -7,5 +7,5 @@ data = data.json()
 data = data["results"]
 results = []
 for res in data:
-    (name, id) = (res["name"], res["id"])
+    (name, id) = (res["name"], res["actor_id"])
     print(name + ": " + str(id))

@@ -13,7 +13,7 @@ class Tree:
         self.root = None
 
     def insert(self, root, id, src):
-        # compare id to root, move left or right or return if equal
+        # compare actor_id to root, move left or right or return if equal
         if not root:
             return Node(id, src)
         elif id < root.id:

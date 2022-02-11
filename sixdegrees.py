@@ -54,9 +54,9 @@ def get_movie_name_from_id(movie_id):
     return data["title"]
 
 
-def get_actor_name_from_id(id):
+def get_actor_name_from_id(actor_id):
     # take actor ID number, send get request to tmdb to retrieve the actor's name
-    data = requests.get("https://api.themoviedb.org/3/person/" + str(id) + "?api_key=" + KEY)
+    data = requests.get("https://api.themoviedb.org/3/person/" + str(actor_id) + "?api_key=" + KEY)
     data = data.json()
     return data["name"]
 
@@ -96,11 +96,11 @@ def check_connections(actors, atree, aroot, mtree, mroot, count, target):
 
 
 def backtrack(path, atree, mtree, aroot, mroot):
-    pathlength = len(path)
-    last = path[pathlength-1]
+    path_length = len(path)
+    last = path[path_length-1]
     if not last:
         return path
-    if pathlength % 2 == 0:
+    if path_length % 2 == 0:
         path.append(mtree.search(mroot, last).src)
         return backtrack(path, atree, mtree, aroot, mroot)
     else:
@@ -134,12 +134,12 @@ while True:
     print(path)
 
     print(get_actor_name_from_id(actor1) + " appeared in ", end="")
-    for i in range(1, len(path)-1):
-        if i % 2 == 0:
-            name = get_actor_name_from_id(path[i])
+    for num in range(1, len(path) - 1):
+        if num % 2 == 0:
+            name = get_actor_name_from_id(path[num])
             print(name + ", who appeared in ", end="")
         else:
-            title = get_movie_name_from_id(path[i])
+            title = get_movie_name_from_id(path[num])
             print(title + " with ", end="")
     print(get_actor_name_from_id(actor2))
     cont = input("Enter 0 to exit or any other input to continue")

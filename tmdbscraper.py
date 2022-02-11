@@ -15,7 +15,7 @@ for i in range(1, 999999):
             req = req.json()
             movies = req["cast"]
             for movie in movies:
-                list.append(movie["id"])
+                list.append(movie["actor_id"])
         a.write(str(list))
         a.write("\n")
         if i % 100 == 0:
@@ -44,7 +44,7 @@ for i in range(1, 999999):
                 req = req.json()
                 cast = req["cast"]
                 for actor in cast:
-                    list.append(actor["id"])
+                    list.append(actor["actor_id"])
             m.write(str(list))
             m.write("\n")
             if i % 100 == 0:
