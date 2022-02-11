@@ -211,7 +211,6 @@ def backtrack(path, aTree, mTree, aRoot, mRoot):
         return backtrack(path, aTree, mTree, aRoot, mRoot)
 
 
-
 while True:
     actorTree = Tree()
     movieTree = Tree()
@@ -228,7 +227,6 @@ while True:
     while actor2 > 999997:
         actor2 = input("That actor is not yet available.  Please try another: ")
         actor2 = int(getActorIDFromName(actor2))
-
 
     actorList = [actor1]
     actorRoot = actorTree.insert(actorRoot, actor1, None)
