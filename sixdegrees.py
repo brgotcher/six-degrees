@@ -128,10 +128,11 @@ while True:
     actorList = [actor1]
     actorRoot = actorTree.insert(actorRoot, actor1, None)
     res = check_connections(actorList, actorTree, actorRoot, movieTree, movieRoot, 0, actor2)
-    print(res)
+    # print(res)
 
     path = res[-2::-1]
     print(path)
+    print("Found a path with " + str(len(path)//2) + " Degrees of separation: ")
 
     print(get_actor_name_from_id(actor1) + " appeared in ", end="")
     for num in range(1, len(path) - 1):
