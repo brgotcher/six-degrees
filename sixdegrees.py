@@ -134,6 +134,7 @@ while True:
     # print(res)
 
     path = res[-2::-1]
+    print("Found a path with " + len(path)//2 + "degrees of separation!")
     print(path)
 
     print(get_actor_name_from_id(actor1) + " appeared in ", end="")
