@@ -16,7 +16,6 @@ class Tree:
     def insert(self, root, id, src):
         # compare actor_id to root, move left or right or return if equal
         if not root:
-            # self.num_of_nodes += 1
             return Node(id, src)
         elif id < root.id:
             root.left = self.insert(root.left, id, src)

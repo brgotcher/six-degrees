@@ -80,6 +80,7 @@ def check_connections(actors, atree, aroot, mtree, mroot, count, target):
             if not mtree.search(mroot, movie):
                 new_movie_list.append(movie)
                 mroot = mtree.insert(mroot, movie, actor)
+
         for movie in new_movie_list:
             actor_list = get_cast_list(movie)
             for actr in actor_list:
