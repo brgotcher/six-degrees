@@ -128,7 +128,10 @@ while True:
     actorList = [actor1]
     actorRoot = actorTree.insert(actorRoot, actor1, None)
     res = check_connections(actorList, actorTree, actorRoot, movieTree, movieRoot, 0, actor2)
-    print(res)
+    if res == -1:
+        print("Congratulations, you've stumped me!")
+        exit()
+    # print(res)
 
     path = res[-2::-1]
     print(path)
