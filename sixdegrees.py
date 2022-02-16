@@ -15,11 +15,11 @@ def get_actor_id_from_name(actor_name):
         tryagain = input("Error: Actor not found check spelling and try again\nEnter an actor: ")
         return get_actor_id_from_name(tryagain)
     # pull ID number from results and return
-    actor_id = str(details["results"][0]["id"])
+    actor_id = details["results"][0]["id"]
     if actor_id > 999997:
         tryagain = input("That actor is not yet available.  Please try another: ")
         return get_actor_id_from_name(tryagain)
-    return actor_id
+    return str(actor_id)
 
 
 def get_movie_list(actor_id):
@@ -113,19 +113,13 @@ def run():
     while True:
         actor_tree = AVL.Tree()
         movie_tree = AVL.Tree()
-        # actor_root = None
+        actor_root = None
         movie_root = None
 
         actor1 = input("Enter an actor: ")
         actor1 = int(get_actor_id_from_name(actor1))
-        # while actor1 > 999997:
-        #     actor1 = input("That actor is not yet available.  Please try another: ")
-        #     actor1 = int(get_actor_id_from_name(actor1))
         actor2 = input("Enter an actor: ")
         actor2 = int(get_actor_id_from_name(actor2))
-        # while actor2 > 999997:
-        #     actor2 = input("That actor is not yet available.  Please try another: ")
-        #     actor2 = int(get_actor_id_from_name(actor2))
 
         actor_list = [actor1]
         actor_root = actor_tree.insert(actor_root, actor1, None)
@@ -133,7 +127,6 @@ def run():
         if res == -1:
             print("Congratulations, you've stumped me!")
             exit()
-        # print(res)
 
         path = res[-2::-1]
         print("Found a path with " + str(len(path)//2) + " degrees of separation!")
