@@ -65,22 +65,29 @@ def get_actor_name_from_id(actor_id):
 
 
 def check_connections(actors, atree, aroot, mtree, mroot, count, target):
-    #
+    # given list of actors new to the current iteration,
+    # find the list of movies they have been in excluding those already processed,
+    # then get the new list of actors from these new movies, excluding those already processed
+    # run recursively until the target actor is found or max steps exceeded
     if count >= 5:
         return -1
-    new_actor_list = []
+    new_actor_list = []  # will hold the new actors not included in previous iterations
+    # iterate the current list of actors and process
     for actor in actors:
         if actor > 999997:
             continue
-        new_movie_list = []
+        new_movie_list = []  # to hold the new movies not included in previous iterations
         movie_list = get_movie_list(actor)
+        # iterate the current actor's list of movies
         for movie in movie_list:
             if movie > 921035:
                 continue
+            # if the current movie hasn't been processed previously, append to both tree & list
             if not mtree.search(mroot, movie):
                 new_movie_list.append(movie)
                 mroot = mtree.insert(mroot, movie, actor)
 
+        # iterate new movies and add any new actors for the next iteration. Stop if target is found
         for movie in new_movie_list:
             actor_list = get_cast_list(movie)
             for actr in actor_list:
@@ -98,6 +105,7 @@ def check_connections(actors, atree, aroot, mtree, mroot, count, target):
 
 
 def backtrack(path, atree, mtree, aroot, mroot):
+    # trace sources back to build the path
     path_length = len(path)
     last = path[path_length-1]
     if not last:
@@ -108,6 +116,22 @@ def backtrack(path, atree, mtree, aroot, mroot):
     else:
         path.append(atree.search(aroot, last).src)
         return backtrack(path, atree, mtree, aroot, mroot)
+
+
+def print_results(res):
+    path = res[-2::-1]
+    print("Found a path with " + str(len(path) // 2) + " degrees of separation!")
+    print(path)
+
+    print(get_actor_name_from_id(path[0]) + " appeared in ", end="")
+    for num in range(1, len(path) - 1):
+        if num % 2 == 0:
+            name = get_actor_name_from_id(path[num])
+            print(name + ", who appeared in ", end="")
+        else:
+            title = get_movie_name_from_id(path[num])
+            print(title + " with ", end="")
+    print(get_actor_name_from_id(path[-1]))
 
 
 def run():
@@ -129,19 +153,8 @@ def run():
             print("Congratulations, you've stumped me!")
             exit()
 
-        path = res[-2::-1]
-        print("Found a path with " + str(len(path)//2) + " degrees of separation!")
-        print(path)
+        print_results(res)
 
-        print(get_actor_name_from_id(actor1) + " appeared in ", end="")
-        for num in range(1, len(path) - 1):
-            if num % 2 == 0:
-                name = get_actor_name_from_id(path[num])
-                print(name + ", who appeared in ", end="")
-            else:
-                title = get_movie_name_from_id(path[num])
-                print(title + " with ", end="")
-        print(get_actor_name_from_id(actor2))
         cont = input("Enter 0 to exit or any other input to continue")
         if cont == "0":
             exit()
