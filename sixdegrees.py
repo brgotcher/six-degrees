@@ -16,6 +16,9 @@ def get_actor_id_from_name(actor_name):
         return get_actor_id_from_name(tryagain)
     # pull ID number from results and return
     actor_id = str(details["results"][0]["id"])
+    if actor_id > 999997:
+        tryagain = input("That actor is not yet available.  Please try another: ")
+        return get_actor_id_from_name(tryagain)
     return actor_id
 
 
@@ -74,7 +77,6 @@ def check_connections(actors, atree, aroot, mtree, mroot, count, target):
         for movie in movie_list:
             if movie > 921035:
                 continue
-            # if movie not in movies and movie not in new_movie_list:
             if not mtree.search(mroot, movie):
                 new_movie_list.append(movie)
                 mroot = mtree.insert(mroot, movie, actor)
@@ -83,7 +85,6 @@ def check_connections(actors, atree, aroot, mtree, mroot, count, target):
             for actr in actor_list:
                 if actr > 999997:
                     continue
-                # if actr not in actors and actr not in new_actor_list:
                 if not atree.search(aroot, actr):
                     new_actor_list.append(actr)
                     aroot = atree.insert(aroot, actr, movie)
@@ -108,44 +109,48 @@ def backtrack(path, atree, mtree, aroot, mroot):
         return backtrack(path, atree, mtree, aroot, mroot)
 
 
-while True:
-    actorTree = AVL.Tree()
-    movieTree = AVL.Tree()
-    actorRoot = None
-    movieRoot = None
+def run():
+    while True:
+        actor_tree = AVL.Tree()
+        movie_tree = AVL.Tree()
+        # actor_root = None
+        movie_root = None
 
-    actor1 = input("Enter an actor: ")
-    actor1 = int(get_actor_id_from_name(actor1))
-    while actor1 > 999997:
-        actor1 = input("That actor is not yet available.  Please try another: ")
+        actor1 = input("Enter an actor: ")
         actor1 = int(get_actor_id_from_name(actor1))
-    actor2 = input("Enter an actor: ")
-    actor2 = int(get_actor_id_from_name(actor2))
-    while actor2 > 999997:
-        actor2 = input("That actor is not yet available.  Please try another: ")
+        # while actor1 > 999997:
+        #     actor1 = input("That actor is not yet available.  Please try another: ")
+        #     actor1 = int(get_actor_id_from_name(actor1))
+        actor2 = input("Enter an actor: ")
         actor2 = int(get_actor_id_from_name(actor2))
+        # while actor2 > 999997:
+        #     actor2 = input("That actor is not yet available.  Please try another: ")
+        #     actor2 = int(get_actor_id_from_name(actor2))
 
-    actorList = [actor1]
-    actorRoot = actorTree.insert(actorRoot, actor1, None)
-    res = check_connections(actorList, actorTree, actorRoot, movieTree, movieRoot, 0, actor2)
-    if res == -1:
-        print("Congratulations, you've stumped me!")
-        exit()
-    # print(res)
+        actor_list = [actor1]
+        actor_root = actor_tree.insert(actor_root, actor1, None)
+        res = check_connections(actor_list, actor_tree, actor_root, movie_tree, movie_root, 0, actor2)
+        if res == -1:
+            print("Congratulations, you've stumped me!")
+            exit()
+        # print(res)
 
-    path = res[-2::-1]
-    print("Found a path with " + len(path)//2 + "degrees of separation!")
-    print(path)
+        path = res[-2::-1]
+        print("Found a path with " + str(len(path)//2) + " degrees of separation!")
+        print(path)
 
-    print(get_actor_name_from_id(actor1) + " appeared in ", end="")
-    for num in range(1, len(path) - 1):
-        if num % 2 == 0:
-            name = get_actor_name_from_id(path[num])
-            print(name + ", who appeared in ", end="")
-        else:
-            title = get_movie_name_from_id(path[num])
-            print(title + " with ", end="")
-    print(get_actor_name_from_id(actor2))
-    cont = input("Enter 0 to exit or any other input to continue")
-    if cont == "0":
-        exit()
+        print(get_actor_name_from_id(actor1) + " appeared in ", end="")
+        for num in range(1, len(path) - 1):
+            if num % 2 == 0:
+                name = get_actor_name_from_id(path[num])
+                print(name + ", who appeared in ", end="")
+            else:
+                title = get_movie_name_from_id(path[num])
+                print(title + " with ", end="")
+        print(get_actor_name_from_id(actor2))
+        cont = input("Enter 0 to exit or any other input to continue")
+        if cont == "0":
+            exit()
+
+
+run()
