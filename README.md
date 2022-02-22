@@ -1,4 +1,4 @@
-# six_degrees
+# six degrees
 
 Command line application that allows a user to enter the names of two actors and returns a path that connects them\
 Example: \
