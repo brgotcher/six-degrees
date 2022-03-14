@@ -118,7 +118,7 @@ def backtrack(path, atree, mtree, aroot, mroot):
         return backtrack(path, atree, mtree, aroot, mroot)
 
 
-def print_results(res):
+def print_results(res, acount, mcount):
     path = res[-2::-1]
     print("Found a path with " + str(len(path) // 2) + " degrees of separation!")
     print(path)
@@ -132,6 +132,7 @@ def print_results(res):
             title = get_movie_name_from_id(path[num])
             print(title + " with ", end="")
     print(get_actor_name_from_id(path[-1]))
+    print("processed " + str(acount) + " actors and " + str(mcount) + " movies")
 
 
 def run():
@@ -153,7 +154,7 @@ def run():
             print("Congratulations, you've stumped me!")
             exit()
 
-        print_results(res)
+        print_results(res, actor_tree.num_of_nodes, movie_tree.num_of_nodes)
 
         cont = input("Enter 0 to exit or any other input to continue")
         if cont == "0":
